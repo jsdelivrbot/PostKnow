@@ -1,13 +1,13 @@
 /**
 *
-* @summary: Area check logic for controller
+* @summary: Logic for arec check controller. Query gov API x amount of times 
+            to build new data objects
 *
 */
 
 exports.areaSearch = (req,res,next) => {
 
-  const { latitude, longitude } = req.body;
-
+  const { coordinates } = req.body;
   
 
 }

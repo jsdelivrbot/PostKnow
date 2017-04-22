@@ -5,22 +5,28 @@
 //React modules
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { browserHistory, Route } from 'react-router';
+import { browserHistory, Router } from 'react-router';
 
-// Redux modules
+// Redux/middleware 
+import thunk from 'redux-thunk';
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux';
 
+//Club together middleware
+const middleware = [thunk];
+
 // Reducers
-import reducers from './reducers/rootReducer';
+import reducers from './src/reducers/rootReducer';
 
 //Route module
 import routes from './routes';
 
-//Import Redux
-const store = createStore(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+const createStoreWithMiddleware = applyMiddleware(...middleware)(createStore);
+
+//Inject reducers into store
+const store = createStoreWithMiddleware(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 ReactDOM.render(
   <Provider store={store}>
     <Router routes={routes} history={browserHistory}/>
-  </Provider>, document.querySelector('.container'));
+  </Provider>, document.getElementById('container'));
