@@ -1,1 +1,5 @@
 node_modules/
+client/dist/site.map
+client/dist/bundle.js
+privateConfig.js
+conf.js

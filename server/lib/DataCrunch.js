@@ -1,11 +1,25 @@
-//
-// @class: Retrieve and count data objects being returned from API
-//
+/**
+*
+* @class:  Manipulate incoming data object to retrieve statistics of crime
+*          in an area.
+*
+*/
 
-module.exports = class DataCrunch {
+const EventEmitter = require('events').EventEmitter;
+const fs = require('fs');
+
+module.exports = class DataCrunch extends EventEmitter {
 
 	constructor(data){
+		super();
 		this._data = data;
+	}
+
+	// Public API
+	//===========
+
+	runManager(){
+		
 	}
 
 }
