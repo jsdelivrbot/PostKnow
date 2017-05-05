@@ -7,16 +7,20 @@
 
 export default class MessageUtil {
 
+	//<-- add boilerplate to reduce other message code
+	//<-- Make use of spread operator
 	static boilerPlate(){
 		return{
 
 		}
 	}
 
+	//error message
 	static error(message, ok="Ok"){
 
 	}
 
+	//confirmation message
 	static confirm(location){
 		return{
 			title: 'Confirm location',

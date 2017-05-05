@@ -9,7 +9,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 import { connect } from 'react-redux';
-import { checkPostcode } from '../../actions/actions';
+import { checkPostcode, queryAPI } from '../../actions/actions';
 import { inputIsSafe } from '../../libs/sanatize';
 import MessageUtil from '../../libs/messageUtil';
 
@@ -18,7 +18,7 @@ class SearchPage extends Component {
   constructor(props){
     super(props);
     this.state = { postcode: '' };
-    this._handleSearch = this._sanatizeInput.bind(this);
+    this._sanatizeInput = this._sanatizeInput.bind(this);
   }
 
   //Update postcode in state object
@@ -42,17 +42,22 @@ class SearchPage extends Component {
     //this.props.checkPostcodeAction(postcode)
   }
 
+	// @Weekend <-- MOVE this logic to action and store pc in store
+
 	// Handle request to server to check user postcode and provide full
 	//adrdress back for confirmation
   _retreiveCoords(postcode){
 		const params = { params: { postcode } };
 		axios.get('/checkPostcode', params)
 				 .then((response) => {
-					 return response.data.error ? swal('Error', response.data.message) : null
+					 //return response.data.error ? swal('Error', response.data.message) : null
 					 const formatted_address = response.data.location.results[0].formatted_address;
+					 const coords = response.data.location.results[0].geometry.location
 					 swal(MessageUtil.confirm(formatted_address), (userConfirm) => {
 						 if(userConfirm){
+							 this.props.queryAPI(coords)
 							 //send off action to reducers
+							 console.log(response);
 							 console.log('simulate accept')
 							 return
 						 }
@@ -98,7 +103,8 @@ class SearchPage extends Component {
 
 // Map query dispatch to component props
 const mapDispatchToProps = (dispatchEvent) => ({
-  checkPostcodeAction: (coordinates) => dispatchEvent(checkPostcode(coordinates))
+  queryAPI: (coordinates) => dispatchEvent(queryAPI(coordinates)),
+	queryPostcode: (postcode) => dispatchEvent(checkPostcode(postcode))
 })
 
 export default connect(null, mapDispatchToProps)(SearchPage)
