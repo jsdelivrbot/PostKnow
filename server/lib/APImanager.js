@@ -107,17 +107,6 @@ module.exports = class APImanager extends EventEmitter {
 		 return allCrimes;
 	}
 
-	logValues(arr){
-		const obj = []
-		log(arr.length);
-		arr.forEach((month) => {
-			month.data.forEach((crime) => {
-				obj.push(crime);
-				console.log(crime.category)
-			})
-		})
-
-	}
 
 	//Run concurrent API requests and save to
 	//data object.
