@@ -27,20 +27,21 @@ module.exports = {
                  options: { presets: ["react", "es2015"] }
                }]
           },
+					/* Removed SASS compiler due to poor maintenancw
           {
               test: /\.(sass|scss)$/,
-              use: ['style-loader', 
+              use: ['style-loader',
                     {
                       loader: 'css-loader',
                       options: { modules: true }
-                    }, 
+                    },
                     'sass-loader']
-          } 
+          }*/
         ]
      },
     resolve: {
        modules: [path.resolve(__dirname, './src'), 'node_modules']
-    },     
+    },
      //webpack change on watch command
      watch: true
 
