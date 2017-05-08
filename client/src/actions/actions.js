@@ -22,16 +22,17 @@ export const queryAPI = (coordinates) => {
 	return (dispatchEvent) => {
 
 		const params = { params: { ...coordinates } }
+		console.log(params);
 
-
-		/*
-		axios.get('/checkarea', param)
+		axios.get('/checkarea', params)
 		     .then((response) => {
-
+					 console.log('response received');
+					 console.log(response);
 				 })
 				 .catch((error) => {
-
-				 })*/
+					 console.log('error received');
+					 console.log(error);
+				 })
 
 		/*
 		dispatchEvent({

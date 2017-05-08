@@ -10,7 +10,6 @@ import axios from 'axios';
 
 import { connect } from 'react-redux';
 import { checkPostcode, queryAPI, clearDialog } from '../actions/actions';
-import { inputIsSafe } from '../libs/sanatize';
 import MessageUtil from '../libs/messageUtil';
 
 class SearchPage extends Component {
@@ -20,7 +19,7 @@ class SearchPage extends Component {
     this.state = {
 			postcode: ''
 		};
-    this._sanatizeInput = this._sanatizeInput.bind(this);
+    this._retreiveCoords = this._retreiveCoords.bind(this);
   }
 
 	//Render confirm of failure message based on server response
@@ -28,7 +27,7 @@ class SearchPage extends Component {
 		if(this.props.displayDialog && this.props.isNotAFail){
 			swal(MessageUtil.confirm(this.props.address), (userConfirm) => {
 				if(userConfirm){
-					return console.log('ready to send off to the api')
+					this.props.queryAPI(this.props.coords);
 				}
 				this._handleUserError('Got it.', 'Please re-enter location');
 			});
@@ -49,23 +48,14 @@ class SearchPage extends Component {
     this.setState({ postcode: e.target.value });
   }
 
-  //Ensure user has not entered malicious code into the input
-  _sanatizeInput(postcode){
-
-		if(inputIsSafe(postcode)){
-			this._retreiveCoords(postcode);
-		}
-		else{
-			swal('Malicious code detected', 'you no good dirty b@#@#@^&');
-		}
-  }
-
 
 	// Handle request to server to check user postcode and provide full
 	//adrdress back for confirmation
-  _retreiveCoords(postcode){
-		console.log(postcode);
-		this.props.queryPostcode(postcode);
+  _retreiveCoords(){
+		if(this.state.postcode){
+			return this.props.queryPostcode(this.state.postcode);
+		}
+		swal('Nothing entered','Please enter a location')
   }
 
 
@@ -89,7 +79,7 @@ class SearchPage extends Component {
                   />
 
                 <button className="button"
-                  onClick={ () => this._sanatizeInput(this.state.postcode)}>
+                  onClick={ () => this._retreiveCoords(this.state.postcode)}>
                   Check area </button>
 
               </div>

@@ -5,8 +5,10 @@
 *           user location.
 */
 
+const fs = require('fs');
+
 const axios = require('axios');
-const CrimeManager = require('../lib/CrimeManager').CrimeManager;
+const CrimeManager = require('../lib/CrimeManager');
 const GOOG_BASE = require('../../conf').GOOG_BASE;
 
 /**
@@ -14,17 +16,25 @@ const GOOG_BASE = require('../../conf').GOOG_BASE;
 */
 exports.areaSearch = (req,res,next) => {
 
-  const { coordinates } = req.body;
+	console.log(req.query);
 
-	//call crime manager
+  const { lat, lng } = req.query;
 
-	//on emit of results send back to client
+	//simulate sending dummy.txt while work on the stats of project
+	const Manager = new CrimeManager(lat,lng);
 
+	//<-- Time res by weekend
+	Manager.on('sendResponse', (response) => {
+		res.json({
+			test: true,
+			message: response
+		});
+	});
 }
 
 /**
 * @event : Retrieve full formatted address of postcode provided by
-*          user and return to client
+*          user and return to client for confirmation
 */
 exports.postcodeCheck = (req,res,next) => {
 
@@ -52,11 +62,9 @@ exports.postcodeCheck = (req,res,next) => {
 //Check response to ensure location exists and
 //status returned 200
 function checkResponse(response){
-	//return on bad response
 	if(response.data.status != 'OK'){
 		return false
 	}
-	//return on undefined address
 	const address = response.data.results[0].formatted_address || 'Undefined';
 	if(address.includes('Undefined')){
 		return false

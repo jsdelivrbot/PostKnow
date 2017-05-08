@@ -35,7 +35,7 @@ module.exports = class APImanager extends EventEmitter {
 		this._runYearRequest().then((data) => {
 
 			//process the data into objects when returned by the
-			const crimeStats = this._createOverallCrimeObejct(data);
+			const crimeStats = this._createOverallCrimeObject(data);
 
 			//emit details to Crime manager
 			this.emit('managerComplete', { data: crimeStats });
@@ -97,7 +97,7 @@ module.exports = class APImanager extends EventEmitter {
 
 	//Collate array of crime objects into single object
 	//and return
-	_createOverallCrimeObejct(arrayOfCrimes){
+	_createOverallCrimeObject(arrayOfCrimes){
 		 const allCrimes = [];
 		 arrayOfCrimes.forEach((month) => {
 			 month.data.forEach((crime) => {
