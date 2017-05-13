@@ -16,6 +16,7 @@ module.exports = class CrimeManager extends EventEmitter {
 
 	constructor(lat,lng){
 		super();
+		this._coords = [lat,lng];
 		//this._apiManager = new APIManager(lat,lng);
 		this._dataManager = null;
 		//this._runCrimeManager();
@@ -77,7 +78,7 @@ module.exports = class CrimeManager extends EventEmitter {
 	//Send request over to data manager to carry out sorting <-- EMIT on nextTick
 	// as results returned after bind!
 	_callDataManager(data){
-		this._dataManager = new DataManager(data);
+		this._dataManager = new DataManager(data, this._coords);
 		this._dataManager.runManager();
 		this._dataManager.on('managerComplete', (response) => {
 			this.emit('sendResponse', response);
