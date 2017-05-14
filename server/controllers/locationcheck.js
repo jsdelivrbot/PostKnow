@@ -11,12 +11,12 @@ const axios = require('axios');
 const CrimeManager = require('../lib/CrimeManager');
 const GOOG_BASE = require('../../conf').GOOG_BASE;
 
+const log = message => console.log(message);
+
 /**
 * @event : Handle API calls to stats API
 */
 exports.areaSearch = (req,res,next) => {
-
-	console.log(req.query);
 
   const { lat, lng } = req.query;
 
@@ -25,11 +25,14 @@ exports.areaSearch = (req,res,next) => {
 
 	//<-- Time res by weekend
 	Manager.on('sendResponse', (response) => {
+		log(response);
 		res.json({
 			test: true,
 			message: response
 		});
 	});
+
+
 }
 
 /**

@@ -10,11 +10,14 @@ const fs = require('fs');
 const distance = require('./utils/spatial').distance;
 const outcomes = require('./utils/searchCriteria').outcomes;
 
+const log = message => console.log(message);
+
 module.exports = class DataCrunch extends EventEmitter {
 
 	constructor(data, coords){
 		super();
 		this._coords = coords;
+		this._tempCoords = ['51.406545','0.161767']			//<-- Need to remove temp coords
 		this._data = data;
 		this._streets = {};
 		this._monthlyFigures = {};
@@ -36,22 +39,39 @@ module.exports = class DataCrunch extends EventEmitter {
 
 	//Cycle through entries
 	_cycleData(){
-		console.log('_cycleData called');
+
 		const data = this._data;
+		const [ uLat, uLng ] = this._tempCoords;
+
 		for(var i = 0, len = data.length; i < len; i++){
+
+			//<-- Need to really remove these to as they should
+			// part of the struct
+			const { latitude: lLat, longitude: lLng } = data[i].location;
+			data[i].spatial = distance(uLat,uLng,lLat,lLng)											   //this has got to be moved out and done in the sort somewhere
+
+
+			console.log(lLat,lLng, uLat, uLng);
+
 			this._collateType(data[i]);
 			this._collateMonthlyFigures(data[i]);
 			this._collateStreets(data[i]);
 			this._hotOrNot(data[i]);
 		}
-		console.log(this._openToClose);
-		this.emit('managerComplete', {
-			monthly: this._monthlyFigures,
-			type: this._type
+
+		//hand back to caller on the next
+		process.nextTick(() => {
+			this.emit('managerComplete', {
+				monthly: this._monthlyFigures,
+				type: this._type,
+				solved: this._openToClose,
+				streetNames: this._streets
+
+			})
 		})
 	}
 
-
+	//Split crimes into various categories
 	_collateType(entity){
 		if(this._type[entity.category]){
 			this._type[entity.category] += 1;
@@ -61,6 +81,7 @@ module.exports = class DataCrunch extends EventEmitter {
 		}
 	}
 
+	//Return overall figures for crime for each month
 	_collateMonthlyFigures(entity){
 		if(this._monthlyFigures[entity.month]){
 			this._monthlyFigures[entity.month] += 1;
@@ -70,8 +91,10 @@ module.exports = class DataCrunch extends EventEmitter {
 		}
 	}
 
+	//Collate overall yearly crime figures for each street
 	_collateStreets(entity){
 		let location = this._getStreet(entity.location.street.name);
+		//if(location === 'Selah Drive'){log(entity)}
 		if(this._streets[location]){
 			this._streets[location] += 1;
 		}
@@ -80,6 +103,8 @@ module.exports = class DataCrunch extends EventEmitter {
 		}
 	}
 
+	// <-- Not complete. Collate outcomes to determine
+	//percentage of solved/unsolved crimes
 	_hotOrNot(entity){
 		let outcome;
 		try{
@@ -102,10 +127,11 @@ module.exports = class DataCrunch extends EventEmitter {
 				//console.log(outcome)
 				break;
 			default:
-					console.log(outcome)
+					//console.log(outcome)
 		}
 	}
 
+	//<-- Move this to dataStruct
 	_spatialSort(){
 
 	}
@@ -114,14 +140,19 @@ module.exports = class DataCrunch extends EventEmitter {
 
 	}
 
+	//<-- Slice
 	_collateStreetFigure(){
 
 	}
 
+	//Return highest roads of crime in set
+	//vicinity of user
 	_collateHottestSpots(){
 
 	}
 
+	//Determine burglary figure based on previous
+	//searches <-- Mongo or SQL 
 	_spatialBurglary(){
 
 	}

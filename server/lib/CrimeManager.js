@@ -12,6 +12,8 @@ const EventEmitter = require('events').EventEmitter;
 const APIManager = require('./APImanager');
 const DataManager = require('./DataCrunch');
 
+const log = message => console.log(message);
+
 module.exports = class CrimeManager extends EventEmitter {
 
 	constructor(lat,lng){
@@ -81,7 +83,9 @@ module.exports = class CrimeManager extends EventEmitter {
 		this._dataManager = new DataManager(data, this._coords);
 		this._dataManager.runManager();
 		this._dataManager.on('managerComplete', (response) => {
+			log('data manager is ready to emit to location check')
 			this.emit('sendResponse', response);
+
 		})
 		this._dataManager.on('managerError', (err) => processServerError(err) );
 	}

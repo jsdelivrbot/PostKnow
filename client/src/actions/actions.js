@@ -34,12 +34,6 @@ export const queryAPI = (coordinates) => {
 					 console.log(error);
 				 })
 
-		/*
-		dispatchEvent({
-			type: GET_DATA,
-			payload: coordinates
-		}) */
-
 	}
 
 }
@@ -50,6 +44,8 @@ export const checkPostcode = (postcode) => {
 
 	return (dispatchEvent) => {
 
+
+		/*
 		const params = { params: { postcode } };
 		return axios.get('/checkpostcode', params )
 		    .then((response) => {
@@ -72,6 +68,14 @@ export const checkPostcode = (postcode) => {
 						type: POSTCODE_FAIL,
 						payload: error
 					})
+				})*/
+
+				const stubCoords = ['stub', 'data'];
+
+				//Test stib funtion whle on the plane
+				dispatchEvent({
+					type: POSTCODE_UPDATE,
+					payload: [postcode,stubCoords]
 				})
 
 	}//end of dispatch return

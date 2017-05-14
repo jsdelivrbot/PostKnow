@@ -1,7 +1,7 @@
 //Import server mordules
 const express = require('express')
 const bodyParser = require('body-parser');
-const cors = require('cors');
+//const cors = require('cors');
 const path = require('path');
 const config = require('./server/config');
 const app = express();
