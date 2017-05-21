@@ -7,8 +7,7 @@
 
 import React from 'react';
 
-const ByCrimeStats = ({stats}) => {
-
+const UserStreet = ({stats}) => {
 
 	return(
 		<section className="stats-component">
@@ -18,4 +17,4 @@ const ByCrimeStats = ({stats}) => {
 
 }
 
-export default ByCrimeStats;
+export default UserStreet;

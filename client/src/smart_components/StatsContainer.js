@@ -8,13 +8,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 //Child components
-/*
-const statPath = '../../components/stats/';
-import ByCrimeStats from `${statPath}byCrimeStats`;
-import BySpatialStats from `${statPath}byCrimeStats`;
-import ClosedToOpenStats from `${statPath}byCrimeStats`;
-import MonthlyStats from `${statPath}byCrimeStats`;
-*/
+import ByCrimeStats from '../components/stats/byCrimeStats'
+//import BySpatialStats from ''
+import ClosedToOpenStats from '../components/stats/closedToOpenStats'
+import MonthlyStats from '../components/stats/monthlyStats'
+
 
 class StatsContainer extends Component {
 
@@ -25,9 +23,22 @@ class StatsContainer extends Component {
 	render(){
 		return(
 			<section className="stats-container">
+
 				<h1> Stats container </h1>
 
-				{/* Children to go here and data passed down to them */}
+				{/* All four need to boxed at some point correctly */}
+				<div className="stats-container-box">
+
+					<ByCrimeStats
+						stats={this.props.byStreetStats}/>
+					<ClosedToOpenStats
+						stats={this.props.solvedStats}/>
+					<MonthlyStats
+						stats={this.props.overallMonthlyStats}/>
+
+			</div>
+
+
 			</section>
 		);
 	}
@@ -38,7 +49,11 @@ class StatsContainer extends Component {
 // components later.
 const mapStateToProps = reduxState => {
 	return{
-		bulkdata: reduxState.stats.data
+		bulkdata: reduxState.stats.data,
+		overallMonthlyStats: reduxState.stats.monthlyOverall,
+		solvedStats: reduxState.stats.solvedOverall,
+		byStreetStats: reduxState.stats.byStreetOverall,
+		userStreet: reduxState.stats.userStreetOverall
 	}
 }
 

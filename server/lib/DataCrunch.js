@@ -22,6 +22,11 @@ module.exports = class DataCrunch extends EventEmitter {
 		this._streets = {};
 		this._monthlyFigures = {};
 		this._closest5 = {}
+		this.selectedStreet = {
+			types: {},
+			openToClose: {}
+		}; //<-- this in not being used but needs to be at some point
+		this.testSelectedStreet = [];
 		this._openToClose = {
 			unsuccessful: 0,
 			successfull: 0,
@@ -47,11 +52,12 @@ module.exports = class DataCrunch extends EventEmitter {
 
 			//<-- Need to really remove these to as they should
 			// part of the struct
+			//20/05 <-- Hacersine formula is not correctly determing the
+			//distance
 			const { latitude: lLat, longitude: lLng } = data[i].location;
 			data[i].spatial = distance(uLat,uLng,lLat,lLng)											   //this has got to be moved out and done in the sort somewhere
-
-
-			console.log(lLat,lLng, uLat, uLng);
+			//console.log(data[i].spatial); <-- either 1 - 0
+			//console.log(lLat,lLng, uLat, uLng);
 
 			this._collateType(data[i]);
 			this._collateMonthlyFigures(data[i]);
@@ -62,11 +68,11 @@ module.exports = class DataCrunch extends EventEmitter {
 		//hand back to caller on the next
 		process.nextTick(() => {
 			this.emit('managerComplete', {
-				monthly: this._monthlyFigures,
-				type: this._type,
-				solved: this._openToClose,
-				streetNames: this._streets
-
+				allStreetsMonthly: this._monthlyFigures,
+				allStreetsType: this._type,
+				allStreetsSolved: this._openToClose,
+				allStreetsbyFigures: this._streets,
+				userStreetCrimes: this.testSelectedStreet
 			})
 		})
 	}
@@ -94,7 +100,11 @@ module.exports = class DataCrunch extends EventEmitter {
 	//Collate overall yearly crime figures for each street
 	_collateStreets(entity){
 		let location = this._getStreet(entity.location.street.name);
-		//if(location === 'Selah Drive'){log(entity)}
+
+		if(location === 'Selah Drive'){
+			this._specificStreet(entity);
+		}
+
 		if(this._streets[location]){
 			this._streets[location] += 1;
 		}
@@ -131,6 +141,18 @@ module.exports = class DataCrunch extends EventEmitter {
 		}
 	}
 
+	//Collate all street crime fir exact spot given by user
+	_specificStreet(dataObj){
+
+		//add the type of crime
+
+		//add the ouctome of the crime
+
+		//Temp to be moved
+		this.testSelectedStreet.push(dataObj);
+
+	}
+
 	//<-- Move this to dataStruct
 	_spatialSort(){
 
@@ -152,7 +174,7 @@ module.exports = class DataCrunch extends EventEmitter {
 	}
 
 	//Determine burglary figure based on previous
-	//searches <-- Mongo or SQL 
+	//searches <-- Mongo or SQL
 	_spatialBurglary(){
 
 	}
@@ -167,4 +189,11 @@ module.exports = class DataCrunch extends EventEmitter {
 	//Collate crime figures for each month
 
 
+}
+
+//To be removed <- poor
+const tempToArray = obj => {
+	for(x in obj){
+		log(x, ':', obj[x]);
+	}
 }

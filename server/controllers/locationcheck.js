@@ -25,7 +25,6 @@ exports.areaSearch = (req,res,next) => {
 
 	//<-- Time res by weekend
 	Manager.on('sendResponse', (response) => {
-		log(response);
 		res.json({
 			test: true,
 			message: response

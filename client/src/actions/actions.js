@@ -3,7 +3,7 @@
 * @summary:  Application actions
 *
 */
-
+import { Router, RouterContext, browserHistory } from 'react-router';
 import axios from 'axios';
 
 //Backend config
@@ -11,7 +11,12 @@ import { SERVER_PATH } from '../../../privateConfig';
 import { GOOG_BASE } from '../../../conf';
 
 // Action enums
-import { POSTCODE_UPDATE, POSTCODE_FAIL, CLEAR_DIALOG } from './types';
+import {
+	POSTCODE_UPDATE,
+	POSTCODE_FAIL,
+	CLEAR_DIALOG,
+	UPDATE_STATS_CONTAINER
+ } from './types';
 
 //-----------------------------------------------------------------------------
 
@@ -26,8 +31,13 @@ export const queryAPI = (coordinates) => {
 
 		axios.get('/checkarea', params)
 		     .then((response) => {
-					 console.log('response received');
-					 console.log(response);
+
+					 dispatchEvent({
+						 type: UPDATE_STATS_CONTAINER,
+						 payload: response.data.message
+					 })
+					 browserHistory.push('/stats');
+
 				 })
 				 .catch((error) => {
 					 console.log('error received');
