@@ -6,23 +6,22 @@
 *					1) line 19 + line 21
 *
 */
-const fs = require('fs');
+const fs = require("fs");
 
-const EventEmitter = require('events').EventEmitter;
-const APIManager = require('./APImanager');
-const DataManager = require('./DataCrunch');
+const EventEmitter = require("events").EventEmitter;
+const APIManager = require("./APImanager");
+const DataManager = require("./DataCrunch");
 
 const log = message => console.log(message);
 
 module.exports = class CrimeManager extends EventEmitter {
-
-	constructor(lat,lng){
+	constructor(lat, lng) {
 		super();
-		this._coords = [lat,lng];
-		//this._apiManager = new APIManager(lat,lng);
+		this._coords = [lat, lng];
+		this._apiManager = new APIManager(lat, lng);
 		this._dataManager = null;
-		//this._runCrimeManager();
-		this._runTestCrimeManager();
+		this._runCrimeManager();
+		//this._runTestCrimeManager(); <-- Test method below
 	}
 
 	// TEST API
@@ -30,23 +29,21 @@ module.exports = class CrimeManager extends EventEmitter {
 
 	//Temporarily work with stub data --> Lead into l65 processAPIResponse() simulating
 	//successfull response from APIManager on line 56.
-	_runTestCrimeManager(){
-		fs.readFile('./stub.json', 'utf8', (err,data) => {
-			if(err){
+	_runTestCrimeManager() {
+		fs.readFile("./stub.json", "utf8", (err, data) => {
+			if (err) {
 				throw err;
 			}
 			const cmobj = JSON.parse(data);
 			//this.emit('sendResponse', cmobj)
 			this._processAPIresponse(cmobj);
-		})
-
-
+		});
 	}
 
 	// Public API
 	//===========
 
-	_runCrimeManager(){
+	_runCrimeManager() {
 		this._callAPImanager();
 	}
 
@@ -55,44 +52,40 @@ module.exports = class CrimeManager extends EventEmitter {
 
 	//Call API manager to traverse external API and collate data into
 	//single array
-	_callAPImanager(){
+	_callAPImanager() {
 		this._apiManager.runManager();
-    this._apiManager.on('managerComplete', (response) => {
-			this._processAPIresponse(response.data)
-		})
-		this._apiManager.on('managerError', (error) => {
+		this._apiManager.on("managerComplete", response => {
+			this._processAPIresponse(response.data);
+		});
+		this._apiManager.on("managerError", error => {
 			this._processServerError(error);
 		});
 	}
 
 	//Check data response to ensure correct type and rough
 	//estimate of numbers before passing to data manager
-	_processAPIresponse(data){
-		if(Array.isArray(data)){
+	_processAPIresponse(data) {
+		if (Array.isArray(data)) {
 			this._callDataManager(data);
+		} else {
+			this.processServerError("Malformed data returned from the server");
 		}
-		else{
-			this.processServerError('Malformed data returned from the server');
-		}
-
 	}
 
 	//Send request over to data manager to carry out sorting <-- EMIT on nextTick
 	// as results returned after bind!
-	_callDataManager(data){
+	_callDataManager(data) {
 		this._dataManager = new DataManager(data, this._coords);
 		this._dataManager.runManager();
-		this._dataManager.on('managerComplete', (response) => {
-			log('data manager is ready to emit to location check')
-			this.emit('sendResponse', response);
-
-		})
-		this._dataManager.on('managerError', (err) => processServerError(err) );
+		this._dataManager.on("managerComplete", response => {
+			log("data manager is ready to emit to location check");
+			this.emit("sendResponse", response);
+		});
+		this._dataManager.on("managerError", err => processServerError(err));
 	}
 
 	//Generic method to process server error
-	_processServerError(error){
-		console.log('error : ' + error);
+	_processServerError(error) {
+		console.log("error : " + error);
 	}
-
-}
+};

@@ -5,31 +5,22 @@
 *
 */
 //React modules
-import React, { Component } from 'react';
+import React, { Component } from "react";
+import { AppWrapper, HeaderWrapper, AppBody } from "./app.styles";
+
+import TopNavigation from "../containers/Navigation/Header";
 
 //Application modules
-import Footer from './footer';
+import Footer from "./footer";
 
 export default class App extends Component {
+	render() {
+		return (
+			<AppWrapper>
+				<TopNavigation />
 
-  render() {
-    return (
-      <div className="app-container">
-
-          {/* Application header */}
-          <section className="header-wrapper">
-            <h3 className="header-title"> Application header </h3>
-          </section>
-
-          {/* Application content */}
-          <section className="app-body">
-            {this.props.children}
-          </section>
-
-          <Footer/>
-
-      </div>
-    );
-  }
-
+				<AppBody>{this.props.children}</AppBody>
+			</AppWrapper>
+		);
+	}
 }

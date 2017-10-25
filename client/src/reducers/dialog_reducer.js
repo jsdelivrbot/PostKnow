@@ -4,29 +4,25 @@
 *
 */
 
-
-import { POSTCODE_FAIL, POSTCODE_UPDATE, CLEAR_DIALOG } from '../actions/types';
+import { POSTCODE_FAIL, POSTCODE_UPDATE, CLEAR_DIALOG } from "../actions/types";
 
 const INIT_STATE = {
 	showMessage: false
-}
+};
 
 //<-- Fix issue with combining UPDATE and FAIL in the same switch expression
 
-export default function(state = INIT_STATE, action){
-
-	switch(action.type)
-	{
+export default function(state = INIT_STATE, action) {
+	switch (action.type) {
 		case POSTCODE_UPDATE:
-			return {...state, showMessage: true};
+			return { ...state, showMessage: true };
 			break;
 		case POSTCODE_FAIL:
-			return {...state, showMessage: true};
+			return { ...state, showMessage: true };
 		case CLEAR_DIALOG:
-			return{...state, showMessage: false};
+			return { ...state, showMessage: false };
 			break;
 	}
 
 	return state;
-
 }

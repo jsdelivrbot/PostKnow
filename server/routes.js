@@ -12,5 +12,4 @@ module.exports = app => {
 	//Confirm users postcode
 	app.get('/checkpostcode', Check.postcodeCheck);
 
-
 }
