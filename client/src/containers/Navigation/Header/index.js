@@ -1,12 +1,56 @@
-import React from "react";
-import { HeaderWrapper } from "./styles";
+import React, { Component } from 'react';
+import {
+	HeaderWrapper,
+	HeaderInnerBlock,
+	AppLogo,
+	Logo,
+	AppMenu,
+	AppLink,
+	BurgerMenu
+} from './styles';
 
-const Wrapper = props => {
-	return (
-		<HeaderWrapper>
-			<h3> Working as it should be </h3>
-		</HeaderWrapper>
-	);
-};
+// @TODO
+// state to show not logged in
+// state to show logged in
+// date state
 
-export default Wrapper;
+export default class Wrapper extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			isMobile: false,
+			isLoggedIn: false,
+			date: null
+		};
+	}
+
+	componentDidMount() {
+		this.setupComponent();
+	}
+
+	setupComponent() {
+		//handle selector
+		//attach breakpoints
+		//
+	}
+
+	setupComponent() {}
+
+	render() {
+		return (
+			<HeaderWrapper id="nav">
+				<HeaderInnerBlock>
+					<AppLogo>
+						<Logo> PostKnow </Logo>
+					</AppLogo>
+					<AppMenu>
+						<AppLink>Login</AppLink>
+						<AppLink>Signup</AppLink>
+						<AppLink>About</AppLink>
+					</AppMenu>
+					<BurgerMenu />
+				</HeaderInnerBlock>
+			</HeaderWrapper>
+		);
+	}
+}

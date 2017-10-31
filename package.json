@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha **/**/**/*.test.js",
     "test-watch": "nodemon --exec 'npm test'",
-    "start": "webpack --watch"
+    "start": "webpack --watch --progress"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -20,6 +20,7 @@
     "chai-http": "^3.0.0",
     "chai-jquery": "^2.0.0",
     "css-loader": "^0.28.0",
+    "eslint-config-rallycoding": "^3.2.0",
     "extract-text-webpack-plugin": "^2.1.0",
     "jquery": "^3.2.1",
     "jsdom": "^9.12.0",

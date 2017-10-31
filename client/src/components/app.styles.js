@@ -1,7 +1,9 @@
-import Styled from "styled-components";
+import Styled from 'styled-components';
 
 export const AppWrapper = Styled.div`
-  color: blue;
+  color: white;
+  display: flex;
+  flex-direction:column;
 `;
 
 export const HeaderWrapper = Styled.div`

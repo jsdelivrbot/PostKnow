@@ -7,20 +7,24 @@
 *
 */
 
-import React, { Component } from "react";
-import axios from "axios";
+import React, { Component } from 'react';
+import axios from 'axios';
 
-import { connect } from "react-redux";
-import { checkPostcode, queryAPI, clearDialog } from "../../actions/actions";
-import MessageUtil from "../../libs/messageUtil";
+import { connect } from 'react-redux';
+import { checkPostcode, queryAPI, clearDialog } from '../../actions/actions';
+import MessageUtil from '../../libs/messageUtil';
 
-import { SearchWrapper } from "./searchComponent.styles";
+import { SearchWrapper, Hero } from './searchComponent.styles';
+
+// does it update
+
+import Input from '../../components/commons/input/';
 
 class SearchPage extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			postcode: "da75qd"
+			postcode: 'da75qd'
 		};
 		this._retreiveCoords = this._retreiveCoords.bind(this);
 	}
@@ -32,10 +36,10 @@ class SearchPage extends Component {
 				if (userConfirm) {
 					this.props.queryAPI(this.props.coords);
 				}
-				this._handleUserError("Got it.", "Please re-enter location");
+				this._handleUserError('Got it.', 'Please re-enter location');
 			});
 		} else if (this.props.displayDialog && !this.props.isNotAFail) {
-			this._handleUserError("Error", "Cannot find location from input");
+			this._handleUserError('Error', 'Cannot find location from input');
 		}
 	}
 
@@ -43,7 +47,7 @@ class SearchPage extends Component {
 	_handleUserError(errorTitle, errorMessage) {
 		swal(errorTitle, errorMessage);
 		this.props.clearDialog();
-		this.setState({ postcode: "" });
+		this.setState({ postcode: '' });
 	}
 
 	//Update postcode in state object
@@ -57,34 +61,21 @@ class SearchPage extends Component {
 		if (this.state.postcode) {
 			return this.props.queryPostcode(this.state.postcode);
 		}
-		swal("Nothing entered", "Please enter a location");
+		swal('Nothing entered', 'Please enter a location');
 	}
 
 	render() {
 		return (
-			<div className="search_wrapper">
-				{/* Icon push and application description */}
-				<section className="search_hero">
-					<h3>remo</h3>
-				</section>
-
-				{/* Postcode input */}
-				<section className="search_search">
-					<div className="search_input">
-						<input
-							value={this.state.postcode}
-							onChange={this._setPostState.bind(this)}
-						/>
-
-						<button
-							className="button"
-							onClick={() => this._retreiveCoords(this.state.postcode)}
-						>
-							Check area{" "}
-						</button>
-					</div>
-				</section>
-			</div>
+			<SearchWrapper>
+				<Hero>
+					<h2> To be removed</h2>
+				</Hero>
+				<Input
+					labelTitle="Postcode"
+					onChange={this._setPostState.bind(this)}
+					value={this.state.postcode}
+				/>
+			</SearchWrapper>
 		);
 	}
 }
@@ -97,13 +88,11 @@ const mapDispatchToProps = dispatchEvent => ({
 });
 
 //Map user coordinate state to props
-const mapStateToProps = reduxState => {
-	return {
-		coords: reduxState.coords.coords,
-		address: reduxState.coords.address,
-		displayDialog: reduxState.dialog.showMessage,
-		isNotAFail: reduxState.coords.isNotAFail
-	};
-};
+const mapStateToProps = reduxState => ({
+	coords: reduxState.coords.coords,
+	address: reduxState.coords.address,
+	displayDialog: reduxState.dialog.showMessage,
+	isNotAFail: reduxState.coords.isNotAFail
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchPage);

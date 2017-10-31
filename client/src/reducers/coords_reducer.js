@@ -12,24 +12,18 @@ const INIT_STATE = {
 	address: 'Area not given',
 	isNotAFail: true,
 	failureMessage: false
-}
+};
 
-export default function(state=INIT_STATE, action){
-
-	switch(action.type)
-	{
+export default function (state = INIT_STATE, action) {
+	switch (action.type) {
 		case POSTCODE_UPDATE:
-			const [address,coords] = action.payload;
-			return { ...state, address, coords};
-			break;
+			const [address, coords] = action.payload;
+			return { ...state, address, coords };
 		case POSTCODE_FAIL:
-			return {...state, isNotAFail: false, message: action.payload};
-			break;
+			return { ...state, isNotAFail: false, message: action.payload };
 		case CLEAR_DIALOG:
-				return {...state, isNotAFail: true};
-				break;
+			return { ...state, isNotAFail: true };
+		default:
+			return state;
 	}
-
-	return state;
-
 }
