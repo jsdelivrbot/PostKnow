@@ -22,6 +22,7 @@ export const HeaderInnerBlock = styled.div`
 `;
 
 export const AppLogo = styled.h1`
+	cursor: pointer;
 	float: left;
 	margin: 0;
 	height: ${props => (props.height ? props.height : `${DEFAULT_HEIGHT}`)};
@@ -46,26 +47,32 @@ export const AppMenu = styled.ul`
 	position: absolute;
 	left: 0;
 	top: ${props => (props.height ? props.height : `${DEFAULT_HEIGHT}`)};
+	background: ${THEME_AQUA};
 	width: 100%;
-	height: 0;
-	padding: 0;
+	height: ${props => (props.isChangingState ? '100vh' : 0)};
+	padding: 3rem 0 0 0;
 	margin: 0;
 	list-style: none;
-	opacity: 0;
+	opacity: ${props => (props.isChangingState ? 1 : 0)};
 	overflow: hidden;
-	transition: opacity 300ms ease-out, height 0ms linear 300ms;
+	transition: ${props =>
+		props.isChangingState
+			? 'opacity 300ms ease-out'
+			: 'opacity 300ms ease-out, height 0ms linear 300ms'};
 `;
 
 export const AppLink = Anchor.extend`
+	cursor: pointer;
 	display: block;
 	padding: 15px 0;
-	color: ${props => (props.color ? props.color : 'black')}
+	color: ${props => (props.color ? 'black' : 'white')};
 	text-align: center;
 	text-decoration: none;
 	letter-spacing: 1px;
 `;
 
 export const BurgerMenu = Anchor.extend`
+	cursor: pointer;
 	float: right;
 	position: relative;
 	width: 60px;
@@ -87,5 +94,13 @@ export const BurgerMenu = Anchor.extend`
 	}
 	&:after {
 		top: 34px;
+	}
+	&:before {
+		transform: ${props =>
+			props.isChangingState ? 'translate3d(0,6px,0) rotate(-45deg)' : ''};
+	}
+	&:after {
+		transform: ${props =>
+			props.isChangingState ? 'translate3d(0,-6px,0) rotate(45deg)' : ''};
 	}
 `;

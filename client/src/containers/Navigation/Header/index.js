@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { NAVIGATION_ID, BURGER_MENU } from '../../../consts/AppElements';
 import {
 	HeaderWrapper,
 	HeaderInnerBlock,
@@ -9,15 +10,11 @@ import {
 	BurgerMenu
 } from './styles';
 
-// @TODO
-// state to show not logged in
-// state to show logged in
-// date state
-
 export default class Wrapper extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			isOpen: false,
 			isMobile: false,
 			isLoggedIn: false,
 			date: null
@@ -25,30 +22,46 @@ export default class Wrapper extends Component {
 	}
 
 	componentDidMount() {
-		this.setupComponent();
+		this.burgerMenu = document.getElementById(BURGER_MENU);
+		this.burgerMenu.addEventListener(
+			'touchend',
+			this.handleOpenMobileMenu.bind(this)
+		);
 	}
 
-	setupComponent() {
-		//handle selector
-		//attach breakpoints
-		//
+	componentWillUnmount() {
+		this.burgerMenu.removeEventListener(
+			'touchend',
+			this.handleOpenMobileMenu.bind(this)
+		);
 	}
 
-	setupComponent() {}
+	handleOpenMobileMenu(e) {
+		e.preventDefault();
+		this.setState({ isOpen: !this.state.isOpen });
+	}
+
+	renderAppStateLinks() {
+		// based on whether logged in render correct links
+	}
 
 	render() {
 		return (
-			<HeaderWrapper id="nav">
+			<HeaderWrapper id={NAVIGATION_ID}>
 				<HeaderInnerBlock>
 					<AppLogo>
 						<Logo> PostKnow </Logo>
 					</AppLogo>
-					<AppMenu>
+					<AppMenu isChangingState={this.state.isOpen}>
 						<AppLink>Login</AppLink>
 						<AppLink>Signup</AppLink>
 						<AppLink>About</AppLink>
 					</AppMenu>
-					<BurgerMenu />
+					<BurgerMenu
+						id={BURGER_MENU}
+						isChangingState={this.state.isOpen}
+						onClick={this.handleOpenMobileMenu.bind(this)}
+					/>
 				</HeaderInnerBlock>
 			</HeaderWrapper>
 		);
