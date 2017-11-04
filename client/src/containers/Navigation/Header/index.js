@@ -7,6 +7,7 @@ import {
 	Logo,
 	AppMenu,
 	AppLink,
+	Li,
 	BurgerMenu
 } from './styles';
 
@@ -53,9 +54,15 @@ export default class Wrapper extends Component {
 						<Logo> PostKnow </Logo>
 					</AppLogo>
 					<AppMenu isChangingState={this.state.isOpen}>
-						<AppLink>Login</AppLink>
-						<AppLink>Signup</AppLink>
-						<AppLink>About</AppLink>
+						<Li>
+							<AppLink>Login</AppLink>
+						</Li>
+						<Li>
+							<AppLink>Signup</AppLink>
+						</Li>
+						<Li>
+							<AppLink>About</AppLink>
+						</Li>
 					</AppMenu>
 					<BurgerMenu
 						id={BURGER_MENU}

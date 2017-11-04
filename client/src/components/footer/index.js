@@ -1,9 +1,11 @@
 import React from 'react';
 
+import { Wrapper } from './footer.styles';
+
 const footer = () => (
-		<footer id="footer-wrapper">
-			<h1> Footer component </h1>
-		</footer>
-	);
+	<Wrapper>
+		<h1> Footer component </h1>
+	</Wrapper>
+);
 
 export default footer;

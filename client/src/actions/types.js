@@ -8,4 +8,6 @@ export const GET_DATA = 'GET_DATA';
 export const UPDATE_STATS_CONTAINER = 'UPDATE_STATS_CONTAINER';
 
 //UI ACTIONS
+export const WINDOW_RESIZE = 'WINDOW_RESIZE';
 export const CLEAR_DIALOG = 'CLEAR_DIALOG';
+export const USER_LOGGED_IN = 'USER_LOGGED_IN';

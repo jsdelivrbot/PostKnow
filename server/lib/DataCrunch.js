@@ -5,10 +5,10 @@
 *
 */
 
-const EventEmitter = require("events").EventEmitter;
-const fs = require("fs");
-const distance = require("./utils/spatial").distance;
-const outcomes = require("./utils/searchCriteria").outcomes;
+const EventEmitter = require('events').EventEmitter;
+const fs = require('fs');
+const distance = require('./utils/spatial').distance;
+const outcomes = require('./utils/searchCriteria').outcomes;
 
 const log = message => console.log(message);
 
@@ -45,7 +45,7 @@ module.exports = class DataCrunch extends EventEmitter {
 		const data = this._data;
 		const [uLat, uLng] = this._coords;
 
-		for (var i = 0, len = data.length; i < len; i++) {
+		for (let i = 0, len = data.length; i < len; i++) {
 			//<-- Need to really remove these to as they should
 			// part of the struct
 			//20/05 <-- Hacersine formula is not correctly determing the
@@ -64,7 +64,7 @@ module.exports = class DataCrunch extends EventEmitter {
 		//hand back to caller on the next cycle as to ensure
 		// caller can register for events
 		process.nextTick(() => {
-			this.emit("managerComplete", {
+			this.emit('managerComplete', {
 				allStreetsMonthly: this._monthlyFigures,
 				allStreetsType: this._type,
 				allStreetsSolved: this._openToClose,
@@ -94,9 +94,9 @@ module.exports = class DataCrunch extends EventEmitter {
 
 	//Collate overall yearly crime figures for each street
 	_collateStreets(entity) {
-		let location = this._getStreet(entity.location.street.name);
+		const location = this._getStreet(entity.location.street.name);
 
-		if (location === "Selah Drive") {
+		if (location === 'Selah Drive') {
 			this._specificStreet(entity);
 		}
 
@@ -160,8 +160,8 @@ module.exports = class DataCrunch extends EventEmitter {
 	_spatialBurglary() {}
 
 	_getStreet(description) {
-		if (description.includes("near")) {
-			return description.split("near ")[1];
+		if (description.includes('near')) {
+			return description.split('near ')[1];
 		}
 		return description;
 	}
@@ -172,6 +172,6 @@ module.exports = class DataCrunch extends EventEmitter {
 //To be removed <- poor
 const tempToArray = obj => {
 	for (x in obj) {
-		log(x, ":", obj[x]);
+		log(x, ':', obj[x]);
 	}
 };

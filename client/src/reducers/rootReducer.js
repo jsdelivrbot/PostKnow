@@ -6,18 +6,19 @@
 */
 
 import { combineReducers } from 'redux';
-import stats_reducer from './stats_reducer';
-import coords_reducer from './coords_reducer';
-import dialog_reducer from './dialog_reducer';
+import statsReducer from './stats_reducer';
+import coordsReducer from './coords_reducer';
+import dialogReducer from './dialog_reducer';
+import uiReducer from './ui_reducer';
 
 const rootReducer = combineReducers({
-  stats: stats_reducer,
-	coords: coords_reducer,
-	dialog: dialog_reducer
+	stats: statsReducer,
+	coords: coordsReducer,
+	dialog: dialogReducer,
+	ui: uiReducer
 });
 
 export default rootReducer;
-
 
 /**
 *

@@ -1,11 +1,10 @@
 import styled from 'styled-components';
 import { THEME_AQUA } from '../../../consts/colorScheme';
-import { Anchor } from '../../../consts/styles.base';
+import { Anchor, BP } from '../../../consts/styles.base';
 
 const DEFAULT_HEIGHT = '60px';
 
 export const HeaderWrapper = styled.nav`
-	position: fixed;
 	left: 0;
 	top: 0;
 	width: 100%;
@@ -19,6 +18,13 @@ export const HeaderWrapper = styled.nav`
 
 export const HeaderInnerBlock = styled.div`
 	padding: 0 15px;
+	@media (min-width: 796px) {
+		display: flex;
+		justify-content: flex-end;
+		margin: 0 auto;
+		height: 100%;
+		max-width: 1000px;
+	}
 `;
 
 export const AppLogo = styled.h1`
@@ -26,6 +32,12 @@ export const AppLogo = styled.h1`
 	float: left;
 	margin: 0;
 	height: ${props => (props.height ? props.height : `${DEFAULT_HEIGHT}`)};
+	@media (min-width: 796px) {
+		flex: 1;
+		align-self: flex-start;
+		float: none;
+		height: 100%;
+	}
 `;
 
 export const Logo = Anchor.extend`
@@ -59,7 +71,27 @@ export const AppMenu = styled.ul`
 		props.isChangingState
 			? 'opacity 300ms ease-out'
 			: 'opacity 300ms ease-out, height 0ms linear 300ms'};
+	@media (min-width: 796px) {
+		display: flex;
+		position: static;
+		width: auto;
+		height: auto;
+		background-color: transparent;
+		opacity: 1;
+		padding-top: 0;
+	}
 `;
+
+export const Li = styled.li`
+	@media (min-width: 769px) {
+		display: flex;
+		align-items: center;
+		height: $nav-height;
+		&:hover {
+			background: #ffa50042;
+		}
+	}
+`; //
 
 export const AppLink = Anchor.extend`
 	cursor: pointer;
@@ -69,6 +101,21 @@ export const AppLink = Anchor.extend`
 	text-align: center;
 	text-decoration: none;
 	letter-spacing: 1px;
+	background: #00ffd408;
+	width: 40%;
+	margin: 10px auto;
+	font-size: 2rem;
+	font-family: "Raleway", arial;
+	transition: opacity 0.2s ease-in;
+	&:hover {
+		opacity: 0.6;
+	}
+	@media (min-width: 796px) {
+		padding: 0 30px;
+		transition: color 150ms ease-out;
+		font-size: 1rem;
+		background: none;
+	}
 `;
 
 export const BurgerMenu = Anchor.extend`
@@ -78,6 +125,7 @@ export const BurgerMenu = Anchor.extend`
 	width: 60px;
 	height: 60px;
 	right: 20px;
+	background: ${props => (props.isChangingState ? '#00ffd408' : 'inherit')};
 	&:before,
 	&:after {
 		content: "";
@@ -102,5 +150,8 @@ export const BurgerMenu = Anchor.extend`
 	&:after {
 		transform: ${props =>
 			props.isChangingState ? 'translate3d(0,-6px,0) rotate(45deg)' : ''};
+	}
+	@media (min-width: 796px) {
+		display: none;
 	}
 `;

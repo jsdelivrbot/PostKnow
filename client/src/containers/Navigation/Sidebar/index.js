@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Wrapper } from './sidebar.styles';
 
 export default class Sidebar extends Component {
 	constructor(props) {
@@ -9,12 +10,14 @@ export default class Sidebar extends Component {
 		};
 	}
 	render() {
-		const { isOpen } = this.props;
-		const sidebarClass = isOpen ? 'sidebar-open' : 'sidebar-closed';
+		const { props } = this;
+		console.log(props.shouldShow);
 		return (
-			<div>
+			<Wrapper shouldShow={props.shouldShow}>
 				<h2> Sidebar </h2>
-			</div>
+				<h3> Hey there </h3>
+				<h1> Do not forget me </h1>
+			</Wrapper>
 		);
 	}
 }

@@ -9,11 +9,18 @@ export const SearchWrapper = styled.div`
 `;
 
 export const Hero = styled.div`
-display: flex;
-  @media(min-width: 800px) {
-  display: none;
+	display: flex;
+	@media (min-width: 800px) {
+		display: none;
+	}
 `;
 
 export const InputHero = styled.div`
-	position: absolute;
+	/*position: absolute;*/
+`;
+
+export const Button = styled.div`
+	padding: 6px;
+	background: blue;
+	color: white;
 `;

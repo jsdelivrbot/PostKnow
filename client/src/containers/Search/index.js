@@ -14,11 +14,23 @@ import { connect } from 'react-redux';
 import { checkPostcode, queryAPI, clearDialog } from '../../actions/actions';
 import MessageUtil from '../../libs/messageUtil';
 
-import { SearchWrapper, Hero } from './searchComponent.styles';
+import { SearchWrapper, Hero, Button } from './searchComponent.styles';
 
 // does it update
-
 import Input from '../../components/commons/input/';
+
+const mapDispatchToProps = dispatchEvent => ({
+	queryAPI: coordinates => dispatchEvent(queryAPI(coordinates)),
+	queryPostcode: postcode => dispatchEvent(checkPostcode(postcode)),
+	clearDialog: () => dispatchEvent(clearDialog())
+});
+
+const mapStateToProps = reduxState => ({
+	coords: reduxState.coords.coords,
+	address: reduxState.coords.address,
+	displayDialog: reduxState.dialog.showMessage,
+	isNotAFail: reduxState.coords.isNotAFail
+});
 
 class SearchPage extends Component {
 	constructor(props) {
@@ -75,24 +87,13 @@ class SearchPage extends Component {
 					onChange={this._setPostState.bind(this)}
 					value={this.state.postcode}
 				/>
+				<Button onClick={() => this._retreiveCoords(this.state.postcode)}>
+					{' '}
+					Search{' '}
+				</Button>
 			</SearchWrapper>
 		);
 	}
 }
-
-// Map query dispatch to component props
-const mapDispatchToProps = dispatchEvent => ({
-	queryAPI: coordinates => dispatchEvent(queryAPI(coordinates)),
-	queryPostcode: postcode => dispatchEvent(checkPostcode(postcode)),
-	clearDialog: () => dispatchEvent(clearDialog())
-});
-
-//Map user coordinate state to props
-const mapStateToProps = reduxState => ({
-	coords: reduxState.coords.coords,
-	address: reduxState.coords.address,
-	displayDialog: reduxState.dialog.showMessage,
-	isNotAFail: reduxState.coords.isNotAFail
-});
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchPage);
