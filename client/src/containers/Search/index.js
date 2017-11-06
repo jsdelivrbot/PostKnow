@@ -8,16 +8,21 @@
 */
 
 import React, { Component } from 'react';
-import axios from 'axios';
-
 import { connect } from 'react-redux';
 import { checkPostcode, queryAPI, clearDialog } from '../../actions/actions';
 import MessageUtil from '../../libs/messageUtil';
+import MobileIcons from '../../components/commons/icons';
+import spillText from '../../consts/data/spilltext';
 
-import { SearchWrapper, Hero, Button } from './searchComponent.styles';
+import {
+	SearchWrapper,
+	Hero,
+	SearchWrapperInnner
+} from './searchComponent.styles';
 
 // does it update
 import Input from '../../components/commons/input/';
+import { Spinner } from '../../components/commons/animations/spinner';
 
 const mapDispatchToProps = dispatchEvent => ({
 	queryAPI: coordinates => dispatchEvent(queryAPI(coordinates)),
@@ -29,7 +34,8 @@ const mapStateToProps = reduxState => ({
 	coords: reduxState.coords.coords,
 	address: reduxState.coords.address,
 	displayDialog: reduxState.dialog.showMessage,
-	isNotAFail: reduxState.coords.isNotAFail
+	isNotAFail: reduxState.coords.isNotAFail,
+	isLoading: reduxState.ui.isLoading
 });
 
 class SearchPage extends Component {
@@ -70,6 +76,7 @@ class SearchPage extends Component {
 	// Handle request to server to check user postcode and provide full
 	//adrdress back for confirmation
 	_retreiveCoords() {
+		console.log('called');
 		if (this.state.postcode) {
 			return this.props.queryPostcode(this.state.postcode);
 		}
@@ -77,20 +84,21 @@ class SearchPage extends Component {
 	}
 
 	render() {
+		const { props, state } = this;
 		return (
 			<SearchWrapper>
-				<Hero>
-					<h2> To be removed</h2>
-				</Hero>
-				<Input
-					labelTitle="Postcode"
-					onChange={this._setPostState.bind(this)}
-					value={this.state.postcode}
-				/>
-				<Button onClick={() => this._retreiveCoords(this.state.postcode)}>
-					{' '}
-					Search{' '}
-				</Button>
+				<SearchWrapperInnner id={'sw-inner'} isLoading={props.isLoading}>
+					<Hero />
+					<Input
+						placeholder="ostcode"
+						labelTitle="Postcode"
+						onChange={this._setPostState.bind(this)}
+						value={state.postcode}
+						handleSearchClick={() => this._retreiveCoords(state.postcode)}
+					/>
+					<MobileIcons data={spillText} />
+				</SearchWrapperInnner>
+				<Spinner shouldShow={props.isLoading} />
 			</SearchWrapper>
 		);
 	}

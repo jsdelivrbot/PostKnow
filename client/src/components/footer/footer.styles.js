@@ -10,6 +10,8 @@ export const Wrapper = styled.div`
 	padding: 1.5rem;
 	background: #00000014;
 	color: ${THEME_OCEAN};
+	position: relative;
+	z-index: 30;
 `;
 
 export const IconContainer = styled.div`

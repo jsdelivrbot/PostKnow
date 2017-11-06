@@ -57,13 +57,14 @@ export const Logo = Anchor.extend`
 
 export const AppMenu = styled.ul`
 	position: absolute;
+	z-index: 100;
 	left: 0;
 	top: ${props => (props.height ? props.height : `${DEFAULT_HEIGHT}`)};
 	background: ${THEME_AQUA};
 	width: 100%;
 	height: ${props => (props.isChangingState ? '100vh' : 0)};
 	padding: 3rem 0 0 0;
-	margin: 0;
+	margin: 20px 0 0 0;
 	list-style: none;
 	opacity: ${props => (props.isChangingState ? 1 : 0)};
 	overflow: hidden;

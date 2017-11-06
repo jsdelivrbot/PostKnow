@@ -19,7 +19,8 @@ import {
 	POSTCODE_UPDATE,
 	POSTCODE_FAIL,
 	CLEAR_DIALOG,
-	UPDATE_STATS_CONTAINER
+	UPDATE_STATS_CONTAINER,
+	SHOW_LOADING
 } from './types';
 
 /**
@@ -31,6 +32,9 @@ import {
 //Query API for 12 months of data based on users
 //provided location
 export const queryAPI = coordinates => dispatchEvent => {
+	dispatchEvent({
+		type: SHOW_LOADING
+	});
 	const params = { params: { ...coordinates } };
 	axios
 		.get('/checkarea', params)

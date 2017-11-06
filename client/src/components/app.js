@@ -71,14 +71,19 @@ class App extends Component {
 		return (
 			<AppWrapper>
 				<TopNavigation selector={NAVIGATION_ID} />
-				<MobileLayoutSwitchContainer mobileLayout={state.mobileLayout}>
+				<MobileLayoutSwitchContainer
+					id={'MOBILE_SWITCH_COINTNER'}
+					mobileLayout={state.mobileLayout}
+				>
 					<SideNavigation
 						mobileLayout={state.mobileLayout}
 						shouldShow={props.shouldShowSidebar}
 						isOpen={state.navigationOpen}
 						selectedState={this.handleStatSelect}
 					/>
-					<AppBody>{props.children}</AppBody>
+					<AppBody shouldHavePadding={props.shouldShowSidebar}>
+						{props.children}
+					</AppBody>
 				</MobileLayoutSwitchContainer>
 				<AppFooter />
 			</AppWrapper>
