@@ -8,11 +8,13 @@ export const SearchWrapper = styled.div`
 	justify-content: center;
 `;
 
-export const Hero = styled.div`
+export const ImageBackground = styled.div`
+	background: url(/img/splash/london.svg);
+	background-size: cover;
+	height: 600px;
 	display: flex;
-	@media (min-width: 800px) {
-		display: none;
-	}
+	justify-content: center;
+	width: 100vw;
 `;
 
 export const SearchWrapperInnner = styled.div`
@@ -30,4 +32,18 @@ export const Button = styled.div`
 	padding: 6px;
 	background: blue;
 	color: white;
+`;
+
+export const AbsTextContainer = styled.div`
+	position: absolute;
+	left: 0;
+`;
+
+export const AbsText = styled.div`
+	margin-top: ${({ top }) => (top ? `${top}px` : '10px')};
+	font-size: 3rem;
+	background: #02404969;
+	padding: 1rem;
+	color: white;
+	position: relative;
 `;

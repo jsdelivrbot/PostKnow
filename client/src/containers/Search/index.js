@@ -16,8 +16,10 @@ import spillText from '../../consts/data/spilltext';
 
 import {
 	SearchWrapper,
-	Hero,
-	SearchWrapperInnner
+	ImageBackground,
+	SearchWrapperInnner,
+	AbsTextContainer,
+	AbsText
 } from './searchComponent.styles';
 
 // does it update
@@ -88,14 +90,19 @@ class SearchPage extends Component {
 		return (
 			<SearchWrapper>
 				<SearchWrapperInnner id={'sw-inner'} isLoading={props.isLoading}>
-					<Hero />
-					<Input
-						placeholder="ostcode"
-						labelTitle="Postcode"
-						onChange={this._setPostState.bind(this)}
-						value={state.postcode}
-						handleSearchClick={() => this._retreiveCoords(state.postcode)}
-					/>
+					<ImageBackground>
+						<AbsTextContainer>
+							<AbsText top="20">Find out</AbsText>
+							<AbsText> More </AbsText>
+						</AbsTextContainer>
+						<Input
+							placeholder="ostcode"
+							labelTitle="Postcode"
+							onChange={this._setPostState.bind(this)}
+							value={state.postcode}
+							handleSearchClick={() => this._retreiveCoords(state.postcode)}
+						/>
+					</ImageBackground>
 					<MobileIcons data={spillText} />
 				</SearchWrapperInnner>
 				<Spinner shouldShow={props.isLoading} />

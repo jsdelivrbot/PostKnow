@@ -10,9 +10,38 @@ export const HeaderWrapper = styled.nav`
 	width: 100%;
 	height: ${props => (props.height ? props.height : `${DEFAULT_HEIGHT}`)};
 	background: ${THEME_AQUA};
+	background: #003b46; /* Old browsers */
+	background: -moz-linear-gradient(
+		45deg,
+		#003b46 18%,
+		#07575b 51%,
+		#66a5ad 83%,
+		#66a5ad 98%,
+		#7db9e8 100%
+	); /* FF3.6-15 */
+	background: -webkit-linear-gradient(
+		45deg,
+		#003b46 18%,
+		#07575b 51%,
+		#66a5ad 83%,
+		#66a5ad 98%,
+		#7db9e8 100%
+	); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(
+		45deg,
+		#003b46 18%,
+		#07575b 51%,
+		#66a5ad 83%,
+		#66a5ad 98%,
+		#7db9e8 100%
+	); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient(
+			startColorstr="#003b46",
+			endColorstr="#7db9e8",
+			GradientType=1
+		);
 	padding: 20px;
 	@media (min-width: 800px) {
-		background: ${THEME_AQUA};
 	}
 `;
 

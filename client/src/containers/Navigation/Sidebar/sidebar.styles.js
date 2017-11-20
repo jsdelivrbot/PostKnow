@@ -50,7 +50,7 @@ const curryCSS = _.curry(sideBarCurry);
 export const Wrapper = styled.div`
 	position: relative;
 	z-index: 10;
-	padding: 1.5rem;
+	padding: 1rem;
 	background: ${THEME_SEAFOAM};
 	transition: all 300ms ease-in;
 	opacity: ${({ shouldShow }) => (shouldShow ? '1' : '0')};
