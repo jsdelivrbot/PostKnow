@@ -28,7 +28,6 @@ const view = () => ({
 });
 
 const sideBarCurry = (sidebarShow, cssDefault) => (cssMobile, cssDesktop) => {
-	console.log(sidebarShow, cssDefault, cssMobile, cssDesktop);
 	let x;
 	if (sidebarShow && view().isMobile) {
 		x = cssMobile;
@@ -36,19 +35,17 @@ const sideBarCurry = (sidebarShow, cssDefault) => (cssMobile, cssDesktop) => {
 		x = cssDesktop;
 	}
 	x = cssDefault;
-	console.log('x is ', x);
 	return x;
 };
-
-/*
-transform: ${({ shouldShow, mobileLayout }) =>
-	determineSidebarLocation(shouldShow)};
-	*/
 
 const curryCSS = _.curry(sideBarCurry);
 
 export const Wrapper = styled.div`
 	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: space-evenly;
+	flex-direction: ${({ isMobile }) => (isMobile ? 'column' : 'row')};
 	z-index: 10;
 	padding: 1rem;
 	background: ${THEME_SEAFOAM};
@@ -61,4 +58,15 @@ export const Wrapper = styled.div`
 		)}
 	width: ${({ shouldShow }) =>
 		curryCSS(shouldShow, 'inherit')('inherit', '120px')};
+`;
+
+export const Icon = styled.div``;
+
+export const IconSVG = styled.img`
+	cursor: pointer;
+	width: ${({ isMobile }) => (isMobile ? '60px' : '40px')};
+	margin-top: ${({ isMobile }) => (isMobile ? '0' : '3rem')};
+	&:hover {
+		${({ selected }) => (selected ? null : 'opacity: 0.5')};
+	}
 `;

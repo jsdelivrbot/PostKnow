@@ -16,6 +16,7 @@ const INIT_STATE = {
 };
 
 export default function (state = INIT_STATE, action) {
+	console.log('action is ', action);
 	switch (action.type) {
 		case GET_MESSAGE:
 			return { ...state, data: action.payload };

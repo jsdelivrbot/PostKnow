@@ -7,7 +7,6 @@ const DEFAULT_HEIGHT = '60px';
 export const HeaderWrapper = styled.nav`
 	left: 0;
 	top: 0;
-	width: 100%;
 	height: ${props => (props.height ? props.height : `${DEFAULT_HEIGHT}`)};
 	background: ${THEME_AQUA};
 	background: #003b46; /* Old browsers */

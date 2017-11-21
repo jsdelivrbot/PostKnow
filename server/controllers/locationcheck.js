@@ -5,11 +5,13 @@
 *           user location.
 */
 
-const fs = require("fs");
+const fs = require('fs');
+const utils = require('util');
+const setTimeStub = utils.promisify(setTimeout);
 
-const axios = require("axios");
-const CrimeManager = require("../lib/CrimeManager");
-const GOOG_BASE = require("../../conf").GOOG_BASE;
+const axios = require('axios');
+const CrimeManager = require('../lib/CrimeManager');
+const GOOG_BASE = require('../../conf').GOOG_BASE;
 
 const log = message => console.log(message);
 
@@ -19,10 +21,22 @@ const log = message => console.log(message);
 exports.areaSearch = (req, res, next) => {
 	const { lat, lng } = req.query;
 
+	setTimeStub(100).then(() =>
+		res.json({
+			message: {
+				allStreetsMonthly: {},
+				allStreetsSolved: {},
+				allStreetsbyFigures: {},
+				userStreetCrimes: []
+			}
+		})
+	);
+
+	/** --> Skip API call while testing F/E -->
+
 	//simulate sending dummy.txt while work on the stats of project
 	const Manager = new CrimeManager(lat, lng);
 
-	//<-- Time res by weekend
 	Manager.on("sendResponse", response => {
 		console.log("call maanger");
 		res.json({
@@ -30,6 +44,7 @@ exports.areaSearch = (req, res, next) => {
 			message: response
 		});
 	});
+	*/
 };
 
 /**
@@ -47,11 +62,11 @@ exports.postcodeCheck = (req, res, next) => {
 			if (checkResponse(response)) {
 				res.json({ error: false, location: response.data });
 			} else {
-				res.json({ error: true, message: "Location could not be found" });
+				res.json({ error: true, message: 'Location could not be found' });
 			}
 		})
 		.catch(error => {
-			console.log(errString("postcodeCheck", error));
+			console.log(errString('postcodeCheck', error));
 			res.json({ error: true, message: error });
 		});
 };
@@ -62,11 +77,11 @@ exports.postcodeCheck = (req, res, next) => {
 //Check response to ensure location exists and
 //status returned 200
 function checkResponse(response) {
-	if (response.data.status != "OK") {
+	if (response.data.status != 'OK') {
 		return false;
 	}
-	const address = response.data.results[0].formatted_address || "Undefined";
-	if (address.includes("Undefined")) {
+	const address = response.data.results[0].formatted_address || 'Undefined';
+	if (address.includes('Undefined')) {
 		return false;
 	}
 	return true;

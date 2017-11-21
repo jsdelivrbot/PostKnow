@@ -76,6 +76,7 @@ class App extends Component {
 					mobileLayout={state.mobileLayout}
 				>
 					<SideNavigation
+						icons={['fingerprint', 'street', 'magGlass', 'scale']}
 						mobileLayout={state.mobileLayout}
 						shouldShow={props.shouldShowSidebar}
 						isOpen={state.navigationOpen}
