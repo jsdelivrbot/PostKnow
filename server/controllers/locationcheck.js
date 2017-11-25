@@ -13,14 +13,13 @@ const axios = require('axios');
 const CrimeManager = require('../lib/CrimeManager');
 const GOOG_BASE = require('../../conf').GOOG_BASE;
 
-const log = message => console.log(message);
-
 /**
 * @event : Handle API calls to stats API
 */
 exports.areaSearch = (req, res, next) => {
 	const { lat, lng } = req.query;
 
+	/*
 	setTimeStub(100).then(() =>
 		res.json({
 			message: {
@@ -30,21 +29,17 @@ exports.areaSearch = (req, res, next) => {
 				userStreetCrimes: []
 			}
 		})
-	);
+	); */
 
-	/** --> Skip API call while testing F/E -->
-
-	//simulate sending dummy.txt while work on the stats of project
 	const Manager = new CrimeManager(lat, lng);
 
-	Manager.on("sendResponse", response => {
-		console.log("call maanger");
+	Manager.on('sendResponse', response => {
+		console.log('call maanger');
 		res.json({
 			test: true,
 			message: response
 		});
 	});
-	*/
 };
 
 /**

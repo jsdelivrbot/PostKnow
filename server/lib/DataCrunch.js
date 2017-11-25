@@ -6,20 +6,17 @@
 */
 
 const EventEmitter = require('events').EventEmitter;
-const fs = require('fs');
-const distance = require('./utils/spatial').distance;
+const haversine = require('haversine');
 const outcomes = require('./utils/searchCriteria').outcomes;
-
-const log = message => console.log(message);
 
 module.exports = class DataCrunch extends EventEmitter {
 	constructor(data, coords) {
 		super();
-		this._coords = coords;
+		this._coords = { latitude: coords[0], longitude: coords[1] };
 		this._data = data;
 		this._streets = {};
 		this._monthlyFigures = {};
-		this._closest5 = {};
+		this._mapsData = {};
 		this.selectedStreet = {
 			types: {},
 			openToClose: {}
@@ -28,7 +25,8 @@ module.exports = class DataCrunch extends EventEmitter {
 		this._openToClose = {
 			unsuccessful: 0,
 			successfull: 0,
-			pending: 0
+			pending: 0,
+			notProvided: 0
 		};
 		this._type = {};
 	}
@@ -43,22 +41,22 @@ module.exports = class DataCrunch extends EventEmitter {
 	//Cycle through entries
 	_cycleData() {
 		const data = this._data;
-		const [uLat, uLng] = this._coords;
 
 		for (let i = 0, len = data.length; i < len; i++) {
-			//<-- Need to really remove these to as they should
-			// part of the struct
-			//20/05 <-- Hacersine formula is not correctly determing the
-			//distance
-			const { latitude: lLat, longitude: lLng } = data[i].location;
-			data[i].spatial = distance(uLat, uLng, lLat, lLng); //this has got to be moved out and done in the sort somewhere
-			//console.log(data[i].spatial); <-- either 1 - 0
-			//console.log(lLat,lLng, uLat, uLng);
+			const { latitude, longitude } = data[i].location;
 
+			data[i].spatial = haversine(
+				this._coords,
+				{ latitude, longitude },
+				{ unit: 'meter' }
+			);
+
+			// Pass each crime entity into sorting functions
+			this._mapStatsData(data[i]);
 			this._collateType(data[i]);
 			this._collateMonthlyFigures(data[i]);
 			this._collateStreets(data[i]);
-			this._hotOrNot(data[i]);
+			// this._offenceOutcome(data[i]); <-- may not need to do that as we call
 		}
 
 		//hand back to caller on the next cycle as to ensure
@@ -69,7 +67,12 @@ module.exports = class DataCrunch extends EventEmitter {
 				allStreetsType: this._type,
 				allStreetsSolved: this._openToClose,
 				allStreetsbyFigures: this._streets,
-				userStreetCrimes: this.testSelectedStreet
+				allStreetsToMap: Object.keys(this._mapsData).map(street => [
+					street,
+					this._mapsData[street]
+				]),
+				userStreetCrimes: this.testSelectedStreet,
+				unsortedCrimes: data
 			});
 		});
 	}
@@ -109,7 +112,7 @@ module.exports = class DataCrunch extends EventEmitter {
 
 	// <-- Not complete. Collate outcomes to determine
 	//percentage of solved/unsolved crimes
-	_hotOrNot(entity) {
+	_updateOutcomeStatus(entity, streetName) {
 		let outcome;
 		try {
 			outcome = entity.outcome_status.category || null;
@@ -119,45 +122,64 @@ module.exports = class DataCrunch extends EventEmitter {
 		switch (true) {
 			case outcomes.failure.includes(outcome):
 				this._openToClose.unsuccessful++;
+				this._mapsData[streetName].outcome.unsolved++;
 				break;
 			case outcomes.success.includes(outcome):
 				this._openToClose.successfull++;
-				//console.log(outcome);
+				this._mapsData[streetName].outcome.solved++;
 				break;
 			case outcomes.pending.includes(outcome):
 				this._openToClose.pending++;
-				//console.log(outcome)
+				this._mapsData[streetName].outcome.pending++;
 				break;
 			default:
-			//console.log(outcome)
+				this._mapsData[streetName].outcome.notProvided++;
 		}
 	}
 
-	//Collate all street crime fir exact spot given by user
-	_specificStreet(dataObj) {
-		//add the type of crime
+	/**
+	*
+	* @NOTE: Map data function and helpers
+	*
+	*/
 
-		//add the ouctome of the crime
-
-		//Temp to be moved
-		this.testSelectedStreet.push(dataObj);
+	_mapStatsData(entity) {
+		const streetName = this._getStreet(entity.location.street.name || null);
+		if (this._mapsData[streetName]) {
+			this._mapAddCrimeAndOutcome(entity, streetName);
+		} else {
+			this._mapsData[streetName] = new Street(entity, streetName);
+		}
 	}
 
-	//<-- Move this to dataStruct
-	_spatialSort() {}
+	_mapAddCrimeAndOutcome(entity, streetName) {
+		const { category } = entity;
+		if (this._mapsData[streetName].crimes[category]) {
+			this._updateCrimeTypeCount(category, streetName);
+		} else {
+			this._addCrimeType(category, streetName);
+		}
+		this._updateOutcomeStatus(entity, streetName);
+	}
 
-	_closestFive(entity) {}
+	_updateCrimeTypeCount(category, streetName) {
+		this._mapsData[streetName].crimes[category]++;
+	}
 
-	//<-- Slice
-	_collateStreetFigure() {}
+	_addCrimeType(category, streetName) {
+		this._mapsData[streetName].crimes[category] = 1;
+	}
 
-	//Return highest roads of crime in set
-	//vicinity of user
-	_collateHottestSpots() {}
+	/*
+	*
+	* @NOTE: Various statistic API
+	*
+	*/
 
-	//Determine burglary figure based on previous
-	//searches <-- Mongo or SQL
-	_spatialBurglary() {}
+	//Collate all street crime fir exact spot given by user
+	_specificStreet(dataObj) {
+		this.testSelectedStreet.push(dataObj);
+	}
 
 	_getStreet(description) {
 		if (description.includes('near')) {
@@ -165,13 +187,32 @@ module.exports = class DataCrunch extends EventEmitter {
 		}
 		return description;
 	}
+}; // end of class
 
-	//Collate crime figures for each month
-};
+/**
+*
+*
+* @HELPER FUNCTIONS
+*
+*/
 
-//To be removed <- poor
-const tempToArray = obj => {
-	for (x in obj) {
-		log(x, ':', obj[x]);
-	}
-};
+const mapGetCoords = ({ location: { latitude, longitude } }) => [
+	latitude,
+	longitude
+];
+
+function Street(entity, streetName) {
+	return {
+		name: streetName,
+		coords: mapGetCoords(entity),
+		crimes: {
+			[entity.category]: 1
+		},
+		outcome: {
+			solved: 0,
+			pending: 0,
+			unsolved: 0,
+			notProvided: 0
+		}
+	};
+}

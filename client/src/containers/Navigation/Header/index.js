@@ -37,7 +37,7 @@ export default class Wrapper extends Component {
 		);
 	}
 
-	handleOpenMobileMenu(e) {
+	handleOpenMobileMenu(e: any): any {
 		e.preventDefault();
 		this.setState({ isOpen: !this.state.isOpen });
 	}

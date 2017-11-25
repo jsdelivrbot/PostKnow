@@ -3,53 +3,37 @@ const ewt = require('extract-text-webpack-plugin');
 const path = require('path');
 
 module.exports = {
+	entry: [`${__dirname}/client/index.js`],
 
-     //selected src file/s for bundling
-     entry: [__dirname + '/client/index.js'],
+	//bundled file/s conact and transformed into
+	output: {
+		path: `${__dirname}/client/dist`,
+		filename: 'bundle.js',
+		sourceMapFilename: 'site.map'
+	},
 
-     //bundled file/s conact and transformed into
-     output: {
-          path: __dirname + '/client/dist',
-          filename: 'bundle.js',
-          sourceMapFilename: 'site.map'
-     },
+	devtool: '#source-map',
 
-     devtool: '#source-map',
-
-     module: {
-          //loaders code needs to be passed through
-          rules: [
-            {
-               test: /\.js?$/,
-               exclude: /node_modules/,
-               use: [{
-                 loader: 'babel-loader',
-                 options: { presets: ["react", "es2015"] }
-               }]
-          },
-					/* Removed SASS compiler due to poor maintenancw
-          {
-              test: /\.(sass|scss)$/,
-              use: ['style-loader',
-                    {
-                      loader: 'css-loader',
-                      options: { modules: true }
-                    },
-                    'sass-loader']
-          }*/
-        ]
-     },
-    resolve: {
-       modules: [path.resolve(__dirname, './src'), 'node_modules']
-    },
-     //webpack change on watch command
-     watch: true
-
+	module: {
+		//loaders code needs to be passed through
+		rules: [
+			{
+				test: /\.js?$/,
+				exclude: /node_modules/,
+				use: [
+					{
+						loader: 'babel-loader',
+						options: { presets: ['react', 'es2015'] }
+					}
+				]
+			}
+		]
+	},
+	resolve: {
+		modules: [path.resolve(__dirname, './src'), 'node_modules'],
+		alias: {
+			'~/src': path.resolve('client/src')
+		}
+	},
+	watch: true
 };
-
-/**
- *      //Extract CSS to seperate file
-     plugins: [
-       new ExtractTextPlugin(__dirname + 'client/dist/styles.css')
-     ],
- */

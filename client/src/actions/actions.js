@@ -39,12 +39,12 @@ export const queryAPI = coordinates => dispatchEvent => {
 	axios
 		.get('/checkarea', params)
 		.then(response => {
-			console.log('what is the response', response); // response is showing through
+			console.log(response);
 			dispatchEvent({
 				type: UPDATE_STATS_CONTAINER,
 				payload: response.data.message
 			});
-			browserHistory.push('/stats');
+			browserHistory.push('/overview');
 		})
 		.catch(error => {
 			console.log('error received');

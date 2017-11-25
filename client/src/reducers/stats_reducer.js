@@ -12,7 +12,8 @@ const INIT_STATE = {
 	monthlyOverall: {},
 	solvedOverall: {},
 	byStreetOverall: {},
-	userStreetOverall: []
+	userStreetOverall: [],
+	mapData: {}
 };
 
 export default function (state = INIT_STATE, action) {
@@ -28,7 +29,8 @@ export default function (state = INIT_STATE, action) {
 				monthlyOverall: action.payload.allStreetsMonthly,
 				solvedOverall: action.payload.allStreetsSolved,
 				byStreetOverall: action.payload.allStreetsbyFigures,
-				userStreetOverall: action.payload.userStreetCrimes
+				userStreetOverall: action.payload.userStreetCrimes,
+				mapData: action.payload.allStreetsToMap
 			};
 	}
 	return state;

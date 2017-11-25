@@ -2,7 +2,12 @@ import React, { Component } from 'react';
 import { ICONS } from '../../../consts/AppElements';
 import { Wrapper, Icon, IconSVG } from './sidebar.styles';
 
-export default class Sidebar extends Component {
+type Props = {
+	shouldShow: boolean,
+	mobileLayout: boolean
+};
+
+export default class Sidebar extends Component<Props> {
 	constructor() {
 		super();
 		this.state = {
@@ -11,8 +16,7 @@ export default class Sidebar extends Component {
 		};
 	}
 
-	handleIconClick(ico) {
-		console.log('dispatch action :: ', ICONS[ico]);
+	handleIconClick(ico: string): void {
 		this.setState({ selected: ico });
 	}
 

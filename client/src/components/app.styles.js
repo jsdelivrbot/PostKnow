@@ -20,6 +20,7 @@ export const AppWrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 	margin: 0;
+	min-height: 100vh;
 `;
 
 export const MobileLayoutSwitchContainer = styled.div`
