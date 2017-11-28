@@ -10,16 +10,17 @@ import { Map, Marker, Popup, TileLayer, CircleMarker } from 'react-leaflet';
 import { MapWrapper, Title } from './map.styles';
 import StreetMarker from './components/circlemarker';
 
-// helper functions to
-// get mean, median, range
-// detemrine color
-// determine radius
-
 class MapOverview extends Component {
 	populateStreetMarkers() {
 		return this.props.mapData.map(street => {
 			const streetData = street[1];
-			return <StreetMarker streetData={streetData} />;
+			return (
+				<StreetMarker
+					streetData={streetData}
+					offenceRange={this.props.offenceRange}
+					radiusRange={this.props.offenceValues}
+				/>
+			);
 		});
 	}
 
@@ -45,7 +46,9 @@ class MapOverview extends Component {
 const mapStateToProps = reduxState => ({
 	coordinates: reduxState.coords.coords,
 	streetAddress: reduxState.coords.address,
-	mapData: reduxState.stats.mapData
+	mapData: reduxState.stats.mapData,
+	offenceRange: reduxState.stats.offenceRange,
+	offenceValues: reduxState.stats.offenceValues
 });
 
 export default connect(mapStateToProps)(MapOverview);

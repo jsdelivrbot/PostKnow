@@ -21,7 +21,6 @@ export default class Sidebar extends Component<Props> {
 	}
 
 	renderIcons(isMobile) {
-		console.log('is Mobile === ', isMobile);
 		return this.props.icons.map(ico => {
 			const selected = ico === this.state.selected;
 			return (

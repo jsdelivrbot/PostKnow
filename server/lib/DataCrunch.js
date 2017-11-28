@@ -1,3 +1,5 @@
+// @flow
+
 /**
 *
 * @class:  Manipulate incoming data object to retrieve statistics of crime
@@ -8,6 +10,10 @@
 const EventEmitter = require('events').EventEmitter;
 const haversine = require('haversine');
 const outcomes = require('./utils/searchCriteria').outcomes;
+
+Array.prototype.includesInObject = function (typeToFind) {
+	return this.find(ele => ele.type === typeToFind);
+};
 
 module.exports = class DataCrunch extends EventEmitter {
 	constructor(data, coords) {
@@ -135,6 +141,7 @@ module.exports = class DataCrunch extends EventEmitter {
 			default:
 				this._mapsData[streetName].outcome.notProvided++;
 		}
+		this._mapsData[streetName].crimeSum++;
 	}
 
 	/**
@@ -154,7 +161,8 @@ module.exports = class DataCrunch extends EventEmitter {
 
 	_mapAddCrimeAndOutcome(entity, streetName) {
 		const { category } = entity;
-		if (this._mapsData[streetName].crimes[category]) {
+		const { crimes } = this._mapsData[streetName];
+		if (crimes.find(crime => crime.type === category)) {
 			this._updateCrimeTypeCount(category, streetName);
 		} else {
 			this._addCrimeType(category, streetName);
@@ -163,11 +171,14 @@ module.exports = class DataCrunch extends EventEmitter {
 	}
 
 	_updateCrimeTypeCount(category, streetName) {
-		this._mapsData[streetName].crimes[category]++;
+		const offence = this._mapsData[streetName].crimes.find(
+			off => off.type === category
+		);
+		offence.count += 1;
 	}
 
 	_addCrimeType(category, streetName) {
-		this._mapsData[streetName].crimes[category] = 1;
+		this._mapsData[streetName].crimes.push(new OffenceType(category));
 	}
 
 	/*
@@ -205,14 +216,20 @@ function Street(entity, streetName) {
 	return {
 		name: streetName,
 		coords: mapGetCoords(entity),
-		crimes: {
-			[entity.category]: 1
-		},
+		crimes: [new OffenceType(entity.category)],
+		crimeSum: 1,
 		outcome: {
 			solved: 0,
 			pending: 0,
 			unsolved: 0,
 			notProvided: 0
 		}
+	};
+}
+
+function OffenceType(category) {
+	return {
+		type: category,
+		count: 1
 	};
 }

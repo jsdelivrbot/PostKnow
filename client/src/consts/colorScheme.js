@@ -8,3 +8,11 @@ export const THEME_ORANGE = '#ecb980';
 // Site text
 export const BLACK = '#fff';
 export const GREY = '';
+
+// Traffic lights
+export const OFF_COLOR = {
+	RED: '#E45438',
+	AMBER: '#E4C538',
+	GREEN: '#94E06E',
+	ODD: '#3886E4'
+};

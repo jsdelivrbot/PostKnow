@@ -2,6 +2,8 @@
 *
 */
 
+import { weightedRange } from '~/src/libs/maths';
+
 import {
 	GET_DATA,
 	GET_MESSAGE,
@@ -13,27 +15,38 @@ const INIT_STATE = {
 	solvedOverall: {},
 	byStreetOverall: {},
 	userStreetOverall: [],
-	mapData: {}
+	mapData: {},
+	offenceRange: {
+		HIGH: 0,
+		MED: 0,
+		LOW: 0
+	}
 };
 
+import { filterOutliers } from '~/src/libs/maths';
+
+const crimeSumForStreet = (arr: Array<any>): any => arr.map(x => x[1].crimeSum);
+
 export default function (state = INIT_STATE, action) {
-	console.log('action is ', action);
+	const { payload } = action;
 	switch (action.type) {
 		case GET_MESSAGE:
-			return { ...state, data: action.payload };
+			return { ...state, data: payload };
 		case GET_DATA:
-			return { ...state, data: action.payload };
+			return { ...state, data: payload };
 		case UPDATE_STATS_CONTAINER:
 			return {
 				...state,
-				monthlyOverall: action.payload.allStreetsMonthly,
-				solvedOverall: action.payload.allStreetsSolved,
-				byStreetOverall: action.payload.allStreetsbyFigures,
-				userStreetOverall: action.payload.userStreetCrimes,
-				mapData: action.payload.allStreetsToMap
+				monthlyOverall: payload.allStreetsMonthly,
+				solvedOverall: payload.allStreetsSolved,
+				byStreetOverall: payload.allStreetsbyFigures,
+				userStreetOverall: payload.userStreetCrimes,
+				mapData: payload.allStreetsToMap,
+				offenceRange: weightedRange(crimeSumForStreet(payload.allStreetsToMap)),
+				offenceValues: [
+					...new Set(filterOutliers(crimeSumForStreet(payload.allStreetsToMap)))
+				]
 			};
 	}
 	return state;
 }
-
-//const mapToArray = obj =>
